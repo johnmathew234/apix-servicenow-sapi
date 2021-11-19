@@ -1,0 +1,370 @@
+{
+	"info": {
+		"_postman_id": "e3b5296e-39dd-4c68-93e8-1979cc578f43",
+		"name": "apix-servicenow-sapi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Creating an Incident",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"Response time is less than 5000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-correlation-id",
+						"value": "{{x-correlation-id}}",
+						"type": "text"
+					},
+					{
+						"key": "client_id",
+						"value": "{{client_id}}",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "{{client_secret}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"errorCode\": 500,\r\n  \"errorType\": {\r\n    \"identifier\": \"CONNECTIVITY\",\r\n    \"parentErrorType\": {\r\n      \"identifier\": \"MULE\",\r\n      \"namespace\": \"SERVICENOW\"\r\n    },\r\n    \"namespace\": \"SERVICENOW\"\r\n  },\r\n  \"errorDescription\": \"ServiceNow Connectivity Error\",\r\n  \"correlationId\": \"abcd123\",\r\n  \"timestamp\": \"2021-11-08T09:55:25.944+05:30\",\r\n  \"apiName\": \"apix-servicenow-sapi\",\r\n  \"apiVersion\": \"1.0.4\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/incidents",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"incidents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieving an Incident",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response time is less than 5000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-correlation-id",
+						"value": "{{x-correlation-id}}",
+						"type": "text"
+					},
+					{
+						"key": "client_id",
+						"value": "{{client_id}}",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "{{client_secret}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/api/incidents/636a942e1b733010c9955283604bcbb3",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"incidents",
+						"636a942e1b733010c9955283604bcbb3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Updating an Incident",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response time is less than 5000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-correlation-id",
+						"value": "{{x-correlation-id}}",
+						"type": "text"
+					},
+					{
+						"key": "client_id",
+						"value": "{{client_id}}",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "{{client_secret}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"errorCode\": 500,\r\n  \"errorType\": {\r\n    \"identifier\": \"CONNECTIVITY\",\r\n    \"parentErrorType\": {\r\n      \"identifier\": \"MULE\",\r\n      \"namespace\": \"SERVICENOW\"\r\n    },\r\n    \"namespace\": \"SERVICENOW\"\r\n  },\r\n  \"errorDescription\": \"ServiceNow Connectivity Error\",\r\n  \"correlationId\": \"abcd123\",\r\n  \"timestamp\": \"2021-11-08T09:55:25.944+05:30\",\r\n  \"apiName\": \"apix-servicenow-sapi\",\r\n  \"apiVersion\": \"1.0.4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/incidents/06a220a21bf33010c9955283604bcb15",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"incidents",
+						"06a220a21bf33010c9955283604bcb15"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deleting an Incident",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response time is less than 5000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-correlation-id",
+						"value": "{{x-correlation-id}}",
+						"type": "text"
+					},
+					{
+						"key": "client_id",
+						"value": "{{client_id}}",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "{{client_secret}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/api/incidents/636a942e1b733010c9955283604bcbb3",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"incidents",
+						"636a942e1b733010c9955283604bcbb3"
+					]
+				},
+				"description": "Deleting"
+			},
+			"response": []
+		},
+		{
+			"name": "readiness",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/ready",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"ready"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "liveliness",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-correlation-id",
+						"value": "\"pranav\"",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/live",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"live"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieving all Incidents",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response time is less than 5000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-correlation-id",
+						"value": "{{x-correlation-id}}",
+						"type": "text"
+					},
+					{
+						"key": "client_id",
+						"value": "{{client_id}}",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "{{client_secret}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"errorDescription\" : \"Database Connectivity Error\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/incidents/retrieveAll",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"incidents",
+						"retrieveAll"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "https://localhost:8082"
+		},
+		{
+			"key": "x-correlation-id",
+			"value": "abcd123"
+		},
+		{
+			"key": "client_id",
+			"value": "test"
+		},
+		{
+			"key": "client_secret",
+			"value": "test"
+		}
+	]
+}

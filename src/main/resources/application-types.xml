@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="error-metadata" format="json">
+      <types:shape format="weave" example="examples/servicenow-metadata.json"><![CDATA[%dw 2.0
+
+type error_metadata = {|
+  errorDescription: String, 
+  errorType: String
+|} {"example": "{\\\"errorDescription\\\":\\\"Failed to connect to Database\\\",\\\"errorType\\\":\\\"DB:CONNECTIVITY\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="new-data" format="json">
+      <types:shape format="weave" example="examples/common-error-response.json"><![CDATA[%dw 2.0
+
+type new_data = {|
+  errorCode: Number {"typeId": "int"}, 
+  errorType: {|
+    identifier: String, 
+    parentErrorType: {|
+      identifier: String, 
+      namespace: String
+    |}, 
+    namespace: String
+  |}, 
+  errorDescription: String, 
+  correlationId: String, 
+  timestamp: String, 
+  apiName: String, 
+  apiVersion: String
+|} {"example": "{\\\"errorCode\\\":500,\\\"errorType\\\":{\\\"identifier\\\":\\\"CONNECTIVITY\\\",\\\"parentErrorType\\\":{\\\"identifier\\\":\\\"ANY\\\",\\\"namespace\\\":\\\"SERVICENOW\\\"},\\\"namespace\\\":\\\"SERVICENOW\\\"},\\\"errorDescription\\\":\\\"ServiceNow Connectivity Error\\\",\\\"correlationId\\\":\\\"abcd123\\\",\\\"timestamp\\\":\\\"2021-11-08T09:55:25.944+05:30\\\",\\\"apiName\\\":\\\"apix-servicenow-sapi\\\",\\\"apiVersion\\\":\\\"1.0.4\\\"}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#0b56c9d2-c9e3-4cad-be74-e728afc3499c">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="error-metadata"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+	<error-handler name="connector-error-handler" doc:id="3ccc5655-5af2-4f54-a53d-04dc182fb310" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="655997f3-7d94-41ba-ae6c-13ecea8a8805" type="SERVICENOW:CONNECTIVITY">
+			<logger level="ERROR" doc:name="Start Logger" doc:id="1b75eca2-b20d-4dd3-8f81-fd6951e08019" />
+			<set-variable value="500" doc:name="httpStatus" doc:id="52600f39-9f1a-48be-bb1f-604a5f19acad" variableName="httpStatus"/>
+			<flow-ref doc:name="error-message-flow" doc:id="a3b51acb-5351-42af-af5e-a0a069fb6c16" name="error-message-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="ad3c33b1-5dca-4814-b223-4775f3516d75" type="SERVICENOW:BAD_REQUEST">
+			<logger level="ERROR" doc:name="Start Logger" doc:id="0822d3f5-ff95-46fb-a74e-e3594c56a761" />
+			<set-variable value="400" doc:name="httpStatus" doc:id="b962b103-60b0-4741-a09c-ffa6485868c6" variableName="httpStatus" />
+			<flow-ref doc:name="error-message-flow" doc:id="f1d8b4b4-8483-4cc3-a4a6-b8932dd346d0" name="error-message-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a281c91a-5704-455f-bfc5-281c9424f8f2" type="SERVICENOW:BAD_RESPONSE">
+			<logger level="ERROR" doc:name="Start Logger" doc:id="ee6a48a3-a431-44d4-b775-3325d926fc72" />
+			<set-variable value="500" doc:name="httpStatus" doc:id="c7d2b992-75d5-4fe5-957e-2fdc711f43f8" variableName="httpStatus"/>
+			<flow-ref doc:name="error-message-flow" doc:id="278c79ca-db85-4358-9296-ec7ff2f537b7" name="error-message-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c7bd0a24-a4dc-4950-971e-076770e43341" type="SERVICENOW:CANNOT_DISPATCH">
+			<logger level="ERROR" doc:name="Start Logger" doc:id="7fdc3281-44a3-43f6-9d8e-afc7dfb4627f" />
+			<set-variable value="500" doc:name="httpStatus" doc:id="6ec42163-032c-42d7-8d17-fb61fc25bdc8" variableName="httpStatus"/>
+			<flow-ref doc:name="error-message-flow" doc:id="5eaef886-208a-4c4b-a9a3-98b1cbbffb66" name="error-message-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d6893b45-d2d5-4b0d-9ba4-68f99b8c97d6" type="SERVICENOW:ENCODING">
+			<logger level="ERROR" doc:name="Start Logger" doc:id="30c860fe-0719-4b08-9454-7e01e446f620" />
+			<set-variable value="415" doc:name="httpStatus" doc:id="d566f1e6-5bfa-49d5-bc91-fda5868f41e1" variableName="httpStatus"/>
+			<flow-ref doc:name="error-message-flow" doc:id="80b0dadf-8b59-483a-a228-130f342ccee2" name="error-message-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="89824db0-73cf-42a6-961f-f0ebf67ab9e4" type="SERVICENOW:INVALID_WSDL">
+			<logger level="ERROR" doc:name="Start Logger" doc:id="c0a03262-4b08-47c8-8add-4960f27032d4" />
+			<set-variable value="107" doc:name="httpStatus" doc:id="e8ed2963-c942-465a-87d4-4d31768fd547" variableName="httpStatus"/>
+			<flow-ref doc:name="error-message-flow" doc:id="a8a4273d-bc17-4d28-8cc4-2bba49d84f13" name="error-message-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7ba48a73-0e54-4821-ac1c-9130ba305312" type="SERVICENOW:PROCESSING_ERROR">
+			<logger level="ERROR" doc:name="Start Logger" doc:id="b560ab76-6d85-415a-b2e4-af85be0ba194" />
+			<set-variable value="102" doc:name="httpStatus" doc:id="eb0158ba-7e71-4a69-baaf-462d2b998c8a" variableName="httpStatus"/>
+			<flow-ref doc:name="error-message-flow" doc:id="54739983-f275-4f88-9c81-c1295d498766" name="error-message-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="454a863f-2eef-4eef-942f-0ebc6de3c7eb" type="SERVICENOW:RETRY_EXHAUSTED">
+			<logger level="ERROR" doc:name="Start Logger" doc:id="c72a7e69-66b7-400c-8fea-19bb8c5ba756" />
+			<set-variable value="429" doc:name="httpStatus" doc:id="8ca3a356-9d1d-4a13-aac3-91135eff1442" variableName="httpStatus"/>
+			<flow-ref doc:name="error-message-flow" doc:id="421503f8-d015-43d8-9282-95cefb3ee48e" name="error-message-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b86ed399-c078-4046-8503-f4b315360101" type="SERVICENOW:SOAP_FAULT">
+			<logger level="ERROR" doc:name="Start Logger" doc:id="5a3ebcd6-fcbb-462b-8a79-25fdbf279d9e" />
+			<set-variable value="500" doc:name="httpStatus" doc:id="e47b2f2e-46ea-492e-870a-bda2d3e13fd6" variableName="httpStatus"/>
+			<flow-ref doc:name="error-message-flow" doc:id="23fd7f8e-7b8a-4e18-8e00-0f4262fede35" name="error-message-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="1353800b-d6d3-4f77-b2d5-2b5041cd29b3" type="SERVICENOW:TIMEOUT">
+			<logger level="ERROR" doc:name="Start Logger" doc:id="ce26022e-510f-4d74-ad89-8471d7dda8ed" />
+			<set-variable value="408" doc:name="httpStatus" doc:id="28b044e5-6a9c-46f5-8548-38179ece51cb" variableName="httpStatus"/>
+			<flow-ref doc:name="error-message-flow" doc:id="e7795423-4705-403b-a028-5d46acc6cd16" name="error-message-flow"/>
+		</on-error-propagate>
+	
+</error-handler>
+	<flow name="error-message-flow" doc:id="3a619185-1ed1-4c87-ab43-666f0f4e0314" >
+		<ee:transform doc:name="Error JSON" doc:id="0bc9d5e2-aef9-4c1c-ab44-139ad33e3d4c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	statusCode: vars.httpStatus,
+	errorType: error.errorType.asString,
+	description: error.description default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

@@ -1,0 +1,7 @@
+servicenow:
+  address : "https://dev113725.service-now.com/"
+  
+tls.keystore:
+    path: "certs/apix-servicenow-sapi.p12"
+    alias: "server"
+    type: "pkcs12"

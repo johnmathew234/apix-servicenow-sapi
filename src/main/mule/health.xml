@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="readiness-check-subflow" doc:id="6eb735e3-db68-44b4-9d11-d81f4dc907b5" >
+		<try doc:name="Try" doc:id="e10b5dc4-8fb9-4c92-a34f-e01301c03167" >
+			<servicenow:invoke service="incident" operation="getRecords" doc:name="Invoke" doc:id="4348a996-e170-497b-89f9-5c47e4ab0200" config-ref="serviceNowConfig" target="incident"/>
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="208c4781-d156-4de4-a408-be20c3315f88" >
+					<ee:transform doc:name="Readiness Response" doc:id="3a2887e0-f8ef-4b05-9d4b-5b737752c428">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	servicename: "ServiceNow",
+	status: if(error.exception.failingComponent == "null")
+	"Down"
+	else
+	"Up"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+				</on-error-continue>
+			</error-handler>
+		</try>
+	</sub-flow>
+</mule>

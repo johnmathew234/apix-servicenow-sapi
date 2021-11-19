@@ -1,0 +1,11 @@
+servicenow:
+  username : "![rqaeoccloxk=]"
+  password : "![M+eLUNLVeIlFAQD43eVp5w==]"
+  address : "https://dev113725.service-now.com/" 
+  
+tls.keystore:
+    keypassword: "![TjrgNiKb/sw=]"
+    password: "![TjrgNiKb/sw=]"
+    path: "certs/apix-servicenow-sapi-prod.p12"
+    alias: "server"
+    type: "pkcs12"

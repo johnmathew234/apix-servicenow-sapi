@@ -1,0 +1,10 @@
+api: 
+  groupId: "36c2a468-08ba-4d9a-9d1e-77c6dafe2de7:apix-servicenow-sapi"
+  artifactId: "apix-servicenow-sapi"
+  version: "1.0.4"
+  spec: "resource::${api.groupId}:${api.artifactId}:${api.version}:oas:zip:api.json"
+  majorVersion: "v1"
+  port: "8082"
+  listenerConfig: "apiHttpListenerConfig"
+
+

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+    <configuration-properties doc:name="commonPropertiesFileConfig" doc:id="d548ee11-10a8-486b-bd18-46677ea93afb" file="properties/common-properties.yaml" />
+    <configuration-properties doc:name="envPropertiesFileConfig" doc:id="d89542f8-cc75-4741-b974-adddb233e25e" file="properties\secure-${mule.env}.yaml" />
+    <tls:context name="tlsContext" doc:name="TLS Context" doc:id="a340ccbd-be58-47cc-9047-ff6ff6219992">
+        <tls:key-store keyPassword="${secure::tls.keystore.keypassword}" password="${secure::tls.keystore.password}" type="${tls.keystore.type}" path="${tls.keystore.path}" alias="${tls.keystore.alias}" />
+    </tls:context>
+    <secure-properties:config name="securePropertiesConfig" doc:name="Secure Properties Config" doc:id="90537d66-25a0-404d-901e-9a25251e3c61" file="properties\secure-${mule.env}.yaml" key="${secure.key}">
+        <secure-properties:encrypt algorithm="Blowfish" />
+    </secure-properties:config>
+    <apikit:config name="apiRouterConfig" api="resource::b0beec90-c6cc-4c36-8f7c-ef1f8f91253b:apix-servicenow-sapi:1.0.9:raml:zip:apix-servicenow-sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <servicenow:config name="serviceNowConfig" doc:name="ServiceNow Config" doc:id="518a7ee1-6cda-41e2-bcb3-c5afa9fdd71f">
+        <servicenow:basic-connection username="${secure::servicenow.username}" password="${secure::servicenow.password}" serviceAddress="${servicenow.address}">
+            <servicenow:transport>
+                <servicenow:basic-auth-http-message-dispatcher-provider username="${secure::servicenow.username}" password="${secure::servicenow.password}" readTimeout="50000" />
+            </servicenow:transport>
+        </servicenow:basic-connection>
+    </servicenow:config>
+    <http:listener-config name="apiHttpListenerConfig" doc:name="HTTP Listener config" doc:id="211125e7-fcbc-4688-a9bd-ac016242dd4b">
+        <http:listener-connection host="0.0.0.0" port="${api.port}" protocol="HTTPS" tlsContext="tlsContext" />
+    </http:listener-config>
+    <global-property doc:name="Global Property" doc:id="593aaf4e-8e5b-4bea-9f34-d90854ec9589" name="mule.env" value="${mule.env}" />
+    <global-property doc:name="Global Property" doc:id="3f6a311f-2f98-4da9-b511-da04d2048a34" name="secure.key" value="${secure.key}" />
+    <configuration doc:name="commonErrorConfig" doc:id="a93c6b70-67ce-4434-822e-50ca848a0a33" defaultErrorHandler-ref="common-error-handler" />
+    <import doc:name="importHealth" doc:id="6f1ae5fd-ab79-43a9-a789-8a980a57d3a8" file="common-health.xml" />
+    <import doc:name="importCommonErrorHandler" doc:id="dae8019e-2594-4374-91f0-7114fb576da7" file="common-error-handler.xml" />
+    <!-- <api-gateway:autodiscovery apiId="${api.id}" ignoreBasePath="true" doc:name="apiAutodiscovery" doc:id="e8915419-5113-4925-a78c-ad96fa613ea6" flowRef="apix-servicenow-sapi-main" /> -->
+</mule>

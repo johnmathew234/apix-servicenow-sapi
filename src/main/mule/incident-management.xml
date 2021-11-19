@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+	<flow name="incident-create-flow" doc:id="35a8e0fb-9aa1-49c0-b5df-cb5795119d94" >
+		<logger level="INFO" doc:name="Start Logger" doc:id="c633e7aa-b7bc-43f7-a865-277785805b5a" message='#[payload]'/>
+		<ee:transform doc:name="Transform to XML" doc:id="0ccaa52e-70b4-4458-8b68-6b9966b6ee90" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.service-now.com/incident
+---
+{
+	ns0#insert: {
+		incident_state: payload.errorCode,
+		caused_by: payload.errorType,
+		description: payload.errorDescription,
+		correlation_id: payload.correlationId,
+		calender_stc: payload.timestamp,
+		short_description: payload.apiName,
+		category: payload.apiVersion,
+		
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<servicenow:invoke service="incident" operation="insert" doc:name="Creating an incident" doc:id="380a7481-0611-4ad9-b29e-7583d4b2dfa6" config-ref="serviceNowConfig"/>
+		<set-payload value='#[output application/json&#10;---&#10;payload]' doc:name="Storing Payload as JSON" doc:id="c32a1aaf-6131-45e8-98d2-3584c5016358" mimeType="application/json" />
+		<logger level="INFO" doc:name="End Logger" doc:id="a80527a6-d194-4267-a86b-b1b1885a9e3a" message='#[payload]'/>
+		<error-handler ref="connector-error-handler" />
+	</flow>
+	<flow name="incident-retrieve-flow" doc:id="640fd00c-44f2-4f18-9d23-99e191e6ba1a" >
+		<logger level="INFO" doc:name="Start Logger" doc:id="cf91c251-b164-4cd8-9f31-30c0e52fdf9e"/>
+		<ee:transform doc:name="Transform to XML" doc:id="e13379c7-203f-492f-9394-717f6a614ce1" >
+			<ee:message >
+				<ee:set-payload resource="dwl/retrieve-incident.dwl" />
+			</ee:message>
+		</ee:transform>
+		<servicenow:invoke service="incident" operation="getRecords" doc:name="Retrieving an Incident" doc:id="89ffbd16-6f62-474d-9837-4737fedb73af" config-ref="serviceNowConfig"/>
+		<set-payload value="#[output application/json
+---
+payload]" doc:name="Storing Payload as JSON" doc:id="50a0b036-203c-4d64-b7f3-b7fdaf17b7f3" />
+		<logger level="INFO" doc:name="End Logger" doc:id="8cfde0e5-eb54-4099-974d-07cb89390bcf"/>
+		<error-handler ref="connector-error-handler" />
+	</flow>
+	<flow name="incident-update-flow" doc:id="a1bc0d98-6c70-4f8e-b3e7-1553dd090194" >
+		<logger level="INFO" doc:name="Start Logger" doc:id="0bf1894a-a72c-4e9c-b893-2d04b53702b5" message='#[payload]'/>
+		<ee:transform doc:name="Transform to XML" doc:id="0b56c9d2-c9e3-4cad-be74-e728afc3499c" >
+			<ee:message >
+				<ee:set-payload resource="dwl/update-incident.dwl" />
+			</ee:message>
+		</ee:transform>
+		<servicenow:invoke doc:name="Updating an Incident" doc:id="2079638a-a25f-42e7-9f06-88c9562e599b" config-ref="serviceNowConfig" service="incident" operation="update" />
+		<set-payload value='#[output application/json&#10;---&#10;payload]' doc:name="Storing Payload as JSON" doc:id="be74a802-dd81-4db8-b979-d182eb32a855" />
+		<logger level="INFO" doc:name="End Logger" doc:id="f5d71011-0e9d-4d80-bc06-eb380785f0c0" message='#[payload]'/>
+		<error-handler ref="connector-error-handler" />
+	</flow>
+	<flow name="inciden-delete-flow" doc:id="694629aa-fa01-400b-9611-14fafe516f08" >
+		<logger level="INFO" doc:name="Start Logger" doc:id="97a5cdd4-2e35-4330-9afb-5c72375c5c05"/>
+		<ee:transform doc:name="Transform to XML" doc:id="85dac844-86a2-457a-8579-981847548ae0" >
+			<ee:message >
+				<ee:set-payload resource="dwl/delete-incident.dwl" />
+			</ee:message>
+		</ee:transform>
+		<servicenow:invoke service="incident" operation="deleteRecord" doc:name="Deleting an Incident" doc:id="bd5d467a-22c3-40da-b32e-d51cffcd1d26" config-ref="serviceNowConfig"/>
+		<set-payload value='#[output application/json&#10;---&#10;payload]' doc:name="Storing Payload as JSON" doc:id="b86facfc-1a55-4e24-9067-9eaf6fd5509c" />
+		<logger level="INFO" doc:name="End Logger" doc:id="b5baeacd-0cb2-48e7-8292-9b1f8b9f6929"/>
+		<error-handler ref="connector-error-handler" />
+	</flow>
+	<flow name="retrieve-all-incidents" doc:id="c5a5c3b6-2519-42cd-a510-83a16e66c75b" >
+		<logger level="INFO" doc:name="Start Logger" doc:id="aa9abf41-f374-493d-98c2-6ff087150502" />
+		<ee:transform doc:name="Transform to XML" doc:id="7ba9df25-2c73-4aba-b9ac-1b11998d96f8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.service-now.com/incident
+---
+{
+	ns0#getRecords: {
+		ns0#description: payload.description
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<servicenow:invoke service="incident" operation="getRecords" doc:name="Retrieving all Incidents" doc:id="196e4308-be32-4a9d-81bb-ce0123bf9877" config-ref="serviceNowConfig"/>
+		<set-payload value="#[output application/json&#10;---&#10;payload]" doc:name="Storing Payload as JSON" doc:id="6ea16672-03d9-4104-81dc-2e34fb3e4078" />
+		<logger level="INFO" doc:name="End Logger" doc:id="4999a3bc-1745-4219-8f33-62bcbb2780f1" />
+		<error-handler ref="connector-error-handler" />
+	</flow>
+</mule>

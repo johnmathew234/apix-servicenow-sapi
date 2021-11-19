@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd">
+	<flow name="incident-trigger-flow" doc:id="1a57593c-bfdf-4932-928b-942dc21e57ce" >
+		<servicenow:new-or-updated-record-listener doc:name="Triggering the Flow When New Incident is Created" doc:id="3e59894f-2d4d-42c8-9a3c-ad82fd48e22c" config-ref="serviceNowConfig" tableName="incident">
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</servicenow:new-or-updated-record-listener>
+		<logger level="INFO" doc:name="Sending Notification" doc:id="7e41a567-91db-4a14-a1c8-5e50c0c9d1a1" message='#["New incident created"]'/>
+	</flow>
+</mule>
